@@ -1,18 +1,19 @@
 
-# Frontend — Week 1 Submission
+# Frontend — Minimal Demo (Teacher-friendly)
 
-This frontend is a minimal React app created to satisfy Week 1 tasks for Md. Saiful Islam.
+This React app provides a small UI for the Smart Hospital Appointment Booking System.
 
-Completed tasks:
-- Repo setup
-- Install React
-- Hello-world page
+Quick run:
 
-Run locally:
 ```bash
 cd frontend
 npm install
-npm start
+npm start   # opens http://localhost:3000
 ```
 
-The app displays a simple "Hello, World!" message for teacher review.
+Notes for demo:
+- The frontend uses a proxy to the backend (see `frontend/package.json`).
+- Pages included: Login, Register, Dashboard, Book Appointment.
+- Use the seeded demo user `alice@example.com / Password123!` to login and show booking flow.
+
+To book an appointment: Login → Book → select doctor & datetime → submit. Dashboard shows appointments.

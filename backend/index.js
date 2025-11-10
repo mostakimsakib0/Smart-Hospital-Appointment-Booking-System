@@ -94,6 +94,73 @@ app.get('/me', verifyToken, (req, res) => {
   });
 });
 
+// Public: list doctors with specialty and user info
+app.get('/doctors', (req, res) => {
+  const db = new sqlite3.Database(dbFile);
+  const q = `SELECT doctors.id as doctor_id, doctors.bio, doctors.rating, specialties.name as specialty, users.id as user_id, users.name as user_name, users.email as user_email
+            FROM doctors
+            LEFT JOIN specialties ON doctors.specialty_id = specialties.id
+            LEFT JOIN users ON doctors.user_id = users.id`;
+  db.all(q, [], (err, rows) => {
+    db.close();
+    if (err) return res.status(500).json({ error: 'internal error' });
+    const doctors = rows.map(r => ({ id: r.doctor_id, bio: r.bio, rating: r.rating, specialty: r.specialty, name: r.user_name, email: r.user_email }));
+    return res.json(doctors);
+  });
+});
+
+// Protected: list appointments for current user
+app.get('/appointments', verifyToken, (req, res) => {
+  const userId = req.user && req.user.id;
+  if (!userId) return res.status(401).json({ error: 'invalid token payload' });
+  const db = new sqlite3.Database(dbFile);
+  const q = `SELECT appointments.id, appointments.patient_id, appointments.doctor_id, appointments.datetime, appointments.status, appointments.reason, users.name as patient_name, dusers.name as doctor_name
+            FROM appointments
+            LEFT JOIN users ON appointments.patient_id = users.id
+            LEFT JOIN doctors ON appointments.doctor_id = doctors.id
+            LEFT JOIN users dusers ON doctors.user_id = dusers.id
+            WHERE appointments.patient_id = ?`;
+  db.all(q, [userId], (err, rows) => {
+    db.close();
+    if (err) return res.status(500).json({ error: 'internal error' });
+    return res.json(rows.map(r => ({ id: r.id, datetime: r.datetime, status: r.status, reason: r.reason, doctor: r.doctor_name })));
+  });
+});
+
+// Protected: create an appointment for current user (patient)
+app.post('/appointments', verifyToken, (req, res) => {
+  const userId = req.user && req.user.id;
+  if (!userId) return res.status(401).json({ error: 'invalid token payload' });
+  const { doctor_id, datetime, reason } = req.body || {};
+  if (!doctor_id || !datetime) return res.status(400).json({ error: 'doctor_id and datetime are required' });
+
+  const db = new sqlite3.Database(dbFile);
+  // validate doctor exists
+  db.get('SELECT id FROM doctors WHERE id = ?', [doctor_id], (err, row) => {
+    if (err) {
+      db.close();
+      return res.status(500).json({ error: 'internal error' });
+    }
+    if (!row) {
+      db.close();
+      return res.status(404).json({ error: 'doctor not found' });
+    }
+
+    db.run('INSERT INTO appointments (patient_id, doctor_id, datetime, status, reason) VALUES (?,?,?,?,?)', [userId, doctor_id, datetime, 'scheduled', reason || null], function(insertErr) {
+      if (insertErr) {
+        db.close();
+        return res.status(500).json({ error: 'failed to create appointment' });
+      }
+      const appointmentId = this.lastID;
+      db.get('SELECT id, patient_id, doctor_id, datetime, status, reason FROM appointments WHERE id = ?', [appointmentId], (ge, apptRow) => {
+        db.close();
+        if (ge) return res.status(500).json({ error: 'failed to retrieve appointment' });
+        return res.status(201).json(apptRow);
+      });
+    });
+  });
+});
+
 app.listen(port, () => {
   console.log(`Backend API listening at http://localhost:${port}`);
 });

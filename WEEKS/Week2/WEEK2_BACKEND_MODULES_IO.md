@@ -1,3 +1,4 @@
+```markdown
 # Week 2 — Backend: Modules & I/O
 
 This document lists the planned backend modules and the expected I/O for Week 2 deliverable.
@@ -85,7 +86,15 @@ DB: SQLite (development)
 ## Status codes & errors
 - 200 OK — successful GET/PUT
 - 201 Created — resource created
-```markdown
-This file has been moved to `WEEKS/Week2/WEEK2_BACKEND_MODULES_IO.md` to keep weekly artifacts organized.
-```
+- 204 No Content — successful delete
+- 400 Bad Request — validation failed
+- 401 Unauthorized — missing/invalid token
 - 403 Forbidden — insufficient permissions
+- 404 Not Found — resource missing
+- 409 Conflict — business conflict (slot taken, duplicate email)
+
+## Next steps (Week 3 prep)
+- Create ER diagram based on entities: users, doctors, appointments, specialties, roles
+- Define SQL schema and migration scripts
+
+```

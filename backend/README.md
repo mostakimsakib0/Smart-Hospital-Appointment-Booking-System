@@ -1,17 +1,28 @@
-# Backend — Week 1
+# Backend — Minimal Demo (Teacher-friendly)
 
-This backend is a minimal Node.js/Express app created to satisfy Week 1 tasks for Md. Mostakim Ahmed Sakib.
+This is a small Node.js/Express backend used for the Smart Hospital Appointment Booking System demo.
 
-Completed tasks:
-- Repo setup
-- Install packages & DB (Express + sqlite3)
-- Hello-world API
+Quick run (recommended for demo):
 
-Run locally:
 ```bash
 cd backend
 npm install
-npm start
+node migrate.js   # create DB and demo data
+node index.js     # start API on http://localhost:3001
 ```
 
-The API exposes a GET / endpoint that returns a Hello World message.
+Demo credentials (seeded by migrations):
+- Patient: alice@example.com / Password123!
+- Doctor: dr.john@example.com / Password123!
+
+Notes:
+- The backend exposes these endpoints that are useful for the demo:
+	- POST /auth/register
+	- POST /auth/login  -> returns { token }
+	- GET /me           -> needs Authorization: Bearer <token>
+	- GET /doctors      -> public list of doctors
+	- GET /appointments -> protected, lists appointments for current user
+	- POST /appointments -> protected, create an appointment (patient uses token)
+- JWT secret defaults to `please_change_this_secret`. For production use set `JWT_SECRET` env var.
+
+If you want a clean demo, run `node migrate.js` before starting the server to recreate tables and seed sample data.

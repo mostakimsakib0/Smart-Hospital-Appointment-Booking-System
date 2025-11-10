@@ -14,18 +14,31 @@ Backend (Md. Mostakim Ahmed Sakib):
 
 How to run locally:
 
-Frontend:
-```bash
-cd frontend
-npm install
-npm start
-```
+## Smart Hospital Appointment Booking System — Show & Demo
 
-Backend:
+For a short teacher demo, see the `SHOWCASE.md` file for step-by-step presentation notes, demo credentials, and minimal run commands.
+
+Files of interest:
+- `backend/` — Node/Express API (authentication, doctors, appointments)
+- `frontend/` — React app (Login, Register, Dashboard, Book appointment)
+
+If you want to run locally:
+
+1) Start backend
+
 ```bash
 cd backend
 npm install
-npm start
+node migrate.js   # creates DB and demo data
+node index.js     # starts API on :3001
 ```
 
-Open frontend at http://localhost:3000 and backend at http://localhost:3001 (default).
+2) Start frontend
+
+```bash
+cd frontend
+npm install
+npm start         # runs on :3000, proxied to backend
+```
+
+Then open http://localhost:3000. For a concise demo script and demo credentials, open `SHOWCASE.md`.
