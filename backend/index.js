@@ -5,6 +5,8 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
+const { verifyToken, signToken } = require('./auth');
+const fs = require('fs');
 
 app.use(cors());
 app.use(express.json());
@@ -49,6 +51,46 @@ app.post('/auth/register', (req, res) => {
         });
       });
     });
+  });
+});
+
+// Login endpoint
+app.post('/auth/login', (req, res) => {
+  const { email, password } = req.body || {};
+  if (!email || !password) return res.status(400).json({ error: 'email and password are required' });
+
+  const db = new sqlite3.Database(dbFile);
+  db.get('SELECT id, name, email, password_hash FROM users WHERE email = ?', [email], (err, row) => {
+    if (err) {
+      db.close();
+      return res.status(500).json({ error: 'internal error' });
+    }
+    if (!row) {
+      db.close();
+      return res.status(401).json({ error: 'invalid credentials' });
+    }
+    const matches = bcrypt.compareSync(password, row.password_hash);
+    if (!matches) {
+      db.close();
+      return res.status(401).json({ error: 'invalid credentials' });
+    }
+
+    const token = signToken({ id: row.id, email: row.email });
+    db.close();
+    return res.json({ token, user: { id: row.id, name: row.name, email: row.email } });
+  });
+});
+
+// Protected endpoint to fetch current user
+app.get('/me', verifyToken, (req, res) => {
+  const userId = req.user && req.user.id;
+  if (!userId) return res.status(401).json({ error: 'invalid token payload' });
+  const db = new sqlite3.Database(dbFile);
+  db.get('SELECT id, name, email FROM users WHERE id = ?', [userId], (err, row) => {
+    db.close();
+    if (err) return res.status(500).json({ error: 'internal error' });
+    if (!row) return res.status(404).json({ error: 'user not found' });
+    return res.json({ id: row.id, name: row.name, email: row.email });
   });
 });
 
