@@ -1,28 +1,19 @@
-# Backend — Minimal Demo (Teacher-friendly)
+# Backend — Medilink API
 
-This is a small Node.js/Express backend used for the Smart Hospital Appointment Booking System demo.
+Requirements: Node 18+ and npm
 
-Quick run (recommended for demo):
+Quick start (from repo root):
 
 ```bash
 cd backend
 npm install
-node migrate.js   # create DB and demo data
-node index.js     # start API on http://localhost:3001
+npm run dev
 ```
 
-Demo credentials (seeded by migrations):
-- Patient: alice@example.com / Password123!
-- Doctor: dr.john@example.com / Password123!
+The server runs on `http://localhost:4000` and exposes these endpoints (examples):
 
-Notes:
-- The backend exposes these endpoints that are useful for the demo:
-	- POST /auth/register
-	- POST /auth/login  -> returns { token }
-	- GET /me           -> needs Authorization: Bearer <token>
-	- GET /doctors      -> public list of doctors
-	- GET /appointments -> protected, lists appointments for current user
-	- POST /appointments -> protected, create an appointment (patient uses token)
-- JWT secret defaults to `please_change_this_secret`. For production use set `JWT_SECRET` env var.
-
-If you want a clean demo, run `node migrate.js` before starting the server to recreate tables and seed sample data.
+- `GET /api/health` — health check
+- `POST /api/auth/register` — register patient
+- `POST /api/auth/login` — login (returns JWT)
+- `GET /api/doctors` — list doctors
+- `GET/POST /api/appointments` — manage appointments (requires JWT)

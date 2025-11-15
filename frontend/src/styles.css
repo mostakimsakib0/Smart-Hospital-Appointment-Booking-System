@@ -1,0 +1,23 @@
+:root{
+  --brand: #0d6efd;
+  --muted: #6c757d;
+}
+.app-font{ font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+body{
+  background: #f8f9fa;
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+.app-header{
+  box-shadow: 0 2px 6px rgba(13,110,253,0.06);
+}
+.hero{
+  background: linear-gradient(90deg, rgba(13,110,253,0.08), rgba(13,110,253,0.02));
+  border-radius: .5rem;
+}
+.doctor-card{ border-radius: .5rem; transition: transform .15s ease, box-shadow .15s ease; }
+.doctor-card:hover{ transform: translateY(-6px); box-shadow: 0 8px 20px rgba(18,38,63,0.08); }
+.muted-small{ color: var(--muted); font-size: .9rem }
+.footer{
+  padding: 2rem 0;
+  color: var(--muted);
+}

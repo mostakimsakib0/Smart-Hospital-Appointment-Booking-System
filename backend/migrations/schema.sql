@@ -1,0 +1,28 @@
+-- Schema for Medilink (SQLite compatible)
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS Users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'patient'
+);
+
+CREATE TABLE IF NOT EXISTS Doctors (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  specialty TEXT,
+  bio TEXT
+);
+
+CREATE TABLE IF NOT EXISTS Appointments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  doctorId INTEGER NOT NULL,
+  patientId INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  time TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'booked',
+  FOREIGN KEY(doctorId) REFERENCES Doctors(id) ON DELETE CASCADE,
+  FOREIGN KEY(patientId) REFERENCES Users(id) ON DELETE CASCADE
+);

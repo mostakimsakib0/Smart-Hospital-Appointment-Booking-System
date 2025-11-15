@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    container_name: medilink-backend
+    environment:
+      - PORT=4000
+      - JWT_SECRET=change_me_for_prod
+    volumes:
+      - ./backend/data:/app/data
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: medilink-frontend
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+    restart: unless-stopped

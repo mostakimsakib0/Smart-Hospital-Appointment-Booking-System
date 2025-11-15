@@ -1,44 +1,12 @@
-# Smart Hospital Appointment Booking System — Week 1 Submission
+Medilink — Smart Hospital Appointment Booking System
 
-This repository contains minimal frontend and backend implementations created for Week 1 tasks.
+This repository contains a full-stack MVP for Medilink: a hospital appointment booking system.
 
-Frontend (Md. Saiful Islam):
-- Repo setup
-- Install React
-- Hello-world page
+- `/backend` — Node.js + Express API using SQLite and JWT auth
+- `/frontend` — Minimal React app (Vite) that consumes backend APIs
+- `/docs` — Week-by-week reports and notes (week-1.md .. week-9.md)
+- `/tests` — simple smoke tests to exercise the API
 
-Backend (Md. Mostakim Ahmed Sakib):
-- Repo setup
-- Install packages & DB
-- Hello-world API
+Weekly breakdown is available in `/docs`. The project was developed across 9 weekly milestones; each week has a short report and the artifacts produced that week.
 
-How to run locally:
-
-## Smart Hospital Appointment Booking System — Show & Demo
-
-For a short teacher demo, see the `SHOWCASE.md` file for step-by-step presentation notes, demo credentials, and minimal run commands.
-
-Files of interest:
-- `backend/` — Node/Express API (authentication, doctors, appointments)
-- `frontend/` — React app (Login, Register, Dashboard, Book appointment)
-
-If you want to run locally:
-
-1) Start backend
-
-```bash
-cd backend
-npm install
-node migrate.js   # creates DB and demo data
-node index.js     # starts API on :3001
-```
-
-2) Start frontend
-
-```bash
-cd frontend
-npm install
-npm start         # runs on :3000, proxied to backend
-```
-
-Then open http://localhost:3000. For a concise demo script and demo credentials, open `SHOWCASE.md`.
+See `/backend/README.md` and `/frontend/README.md` for run instructions.
